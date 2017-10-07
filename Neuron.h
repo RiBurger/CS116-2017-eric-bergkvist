@@ -13,15 +13,15 @@ class Neuron
 	static constexpr double C_ = 1.0;
 	static constexpr double tau_ = 0.02;
 	static constexpr double refractory_period = 0.002;
-	static constexpr int treshold_potential = 20;
+	static constexpr double treshold_potential = 10.0;
 	
 	double membrane_pot;
 	unsigned int num_spikes; // only positive values
-	std::vector<unsigned int> time_spikes;
+	std::vector<double> time_spikes;
 	
 	public :
 	
-	Neuron(double pot, unsigned int spikes, std::vector<unsigned int> time); // constructor
+	Neuron(double pot, unsigned int spikes, std::vector<double> time); // constructor
 	Neuron(); // default constructor
 	// Neuron(const Neuron& neuron); // copy constructor
 	~Neuron(); // destructor
@@ -32,7 +32,7 @@ class Neuron
 	
 	void setPot(double pot); //				
 	void setNum(unsigned int spikes); // setters
-	void setTimeSpikes(std::vector<unsigned int> time); //
+	void setTimeSpikes(std::vector<double> time); //
 	
 	bool isRefractory(double time); // returns true if the neuron is in a refractory state
 	

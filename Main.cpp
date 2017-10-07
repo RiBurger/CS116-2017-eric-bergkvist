@@ -15,7 +15,7 @@ int main()
 	double h(0.0002); // time interval between two updates
 	int a; // simulation steps after which the current is active
 	int b; // simulation steps after which the current is inactive again
-	int n(1000); // number of steps
+	int n(200); // number of steps
 	double t_final = n * h; 
 	double I_ext(0.0);
 	
@@ -59,10 +59,17 @@ int main()
 	
 	while (t < t_final)
 	{
-		for (auto neuron : neurons)
-		neuron.update(h, I_ext, t);
-		neuron_potential << neuron.getPot() << std::endl;
-		t += h;
+		for (unsigned int i(0); i < neurons.size(); ++i)
+		{
+			std::cout << "Membrane_pot avant update : " << neurons[i].getPot() << std::endl;
+			neurons[i].update(h, I_ext, t);
+			std::cout << "Membrane_pot après update : " << neurons[i].getPot() << std::endl;
+			neuron_potential << neurons[i].getPot() << std::endl;
+			t += h;
+			std::cout << "Membrane_pot fin de for : " << neurons[i].getPot() << std::endl;
+		}
 	}
+	
+	neuron_potential.close();
 	return 0;
 }
