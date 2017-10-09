@@ -11,9 +11,9 @@ class Neuron
 	private :
 	
 	static constexpr double C_ = 1.0;
-	static constexpr double tau_ = 0.02;
-	static constexpr double refractory_period = 0.002;
-	static constexpr double treshold_potential = 10.0;
+	static constexpr double tau_ = 20.0;
+	static constexpr double refractory_period = 2.0;
+	static constexpr double treshold_potential = 20.0;
 	
 	double membrane_pot;
 	unsigned int num_spikes; // only positive values

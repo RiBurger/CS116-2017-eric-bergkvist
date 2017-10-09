@@ -11,15 +11,14 @@ int main()
 	Neuron neuron;
 	neurons.push_back(neuron);
 	
-	double t = 0;
-	double h(0.0002); // time interval between two updates
+	double h(0.2); // time interval between two updates (in ms)
 	int a; // simulation steps after which the current is active
 	int b; // simulation steps after which the current is inactive again
-	int n(200); // number of steps
-	double t_final = n * h; 
+	int n(200); // final number of steps
+	int n_steps(0);
 	double I_ext(0.0);
 	
-	
+	// infinite loop if I write a letter instead of a number in the next cout
 	
 	std::cout << "What's the intensity of the external current?" << std::endl;
 	while (I_ext <= 0.0)
@@ -57,16 +56,25 @@ int main()
 	std::ofstream neuron_potential;
 	neuron_potential.open("Potential.txt");
 	
-	while (t < t_final)
+	double I(0.0);
+	
+	while (n_steps < n)
 	{
+		if((n_steps < a) or (n_steps > b))
+		{
+			I = 0.0;
+		}
+		else
+		{
+			I = I_ext;
+		}
+		
 		for (unsigned int i(0); i < neurons.size(); ++i)
 		{
-			std::cout << "Membrane_pot avant update : " << neurons[i].getPot() << std::endl;
-			neurons[i].update(h, I_ext, t);
-			std::cout << "Membrane_pot après update : " << neurons[i].getPot() << std::endl;
-			neuron_potential << neurons[i].getPot() << std::endl;
-			t += h;
-			std::cout << "Membrane_pot fin de for : " << neurons[i].getPot() << std::endl;
+			neurons[i].update(h, I, n_steps * h);
+			neuron_potential << neurons[i].getPot() << " pA at t = " << n_steps * h << " ms" << std::endl;
+			n_steps += 1;
+			std::cout << "Membrane_pot : " << neurons[i].getPot() << std::endl;
 		}
 	}
 	

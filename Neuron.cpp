@@ -9,7 +9,7 @@ Neuron::Neuron(double pot, unsigned int spikes, std::vector<double> time)
 Neuron::Neuron()
 	: membrane_pot(0.0), num_spikes(0), time_spikes()
 	{
-		time_spikes.push_back(0.0);
+		// time_spikes.push_back(0.0);
 		// std::cout << "Neurone créé" << std::endl;
 	}
 
@@ -53,12 +53,19 @@ void Neuron::setTimeSpikes(std::vector<double> time)
 
 bool Neuron::isRefractory(double time)
 {
-	if(time_spikes.back() > time - refractory_period)
+	if(time_spikes.empty())
+	{
+		return false;
+	}
+	else if(time_spikes.back() > time - refractory_period)
 	{
 		std::cout << "refract'" << std::endl;
 		return true;
 	}
+	else
+	{
 	return false;
+	}
 }
 
 void Neuron::update(double dt, double courant, double time)
@@ -69,15 +76,15 @@ void Neuron::update(double dt, double courant, double time)
 	}
 	else 
 	{
+		membrane_pot = exp(-dt/tau_) * membrane_pot + courant * (tau_ / C_) * (1 - exp(-dt/tau_));
 		if(membrane_pot > treshold_potential)
 		{
 			std::cout << "Seuil atteint" << std::endl;
-			time_spikes.push_back(time);
-			std::cout << "Time : " << time << std::endl;
+			time_spikes.push_back(time + dt);
+			std::cout << "Time : " << time << " ms" << std::endl;
 			num_spikes += 1;
-			std::cout << "Time_spikes.back() = " << time_spikes.back() << std::endl;
+			// std::cout << "Time_spikes.back() = " << time_spikes.back() << std::endl;
 		}
-	membrane_pot = exp(-dt/tau_) * membrane_pot + courant * (tau_ / C_) * (1 - exp(-dt/tau_));
 	}
 }
 
